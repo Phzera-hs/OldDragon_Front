@@ -46,6 +46,8 @@ ESTILOS = {
 
 @app.route('/')
 def index():
+    # Clear session when starting over
+    session.clear()
     return render_template('index.html')
 
 @app.route('/raca', methods=['GET', 'POST'])
@@ -66,11 +68,13 @@ def escolher_raca():
         
         return render_template('raca.html', error="Nome ou raça inválidos")
     
-    return render_template('raca.html')
+    # If GET request, check if we have a name from previous step
+    nome = session.get('nome', '')
+    return render_template('raca.html', nome=nome)
 
 @app.route('/alinhamento', methods=['GET', 'POST'])
 def escolher_alinhamento():
-    if 'nome' not in session or session['raca_opcao'] != '1':
+    if 'nome' not in session or session.get('raca_opcao') != '1':
         return redirect(url_for('index'))
     
     if request.method == 'POST':
@@ -90,9 +94,78 @@ def escolher_estilo():
         estilo_opcao = request.form.get('estilo')
         if estilo_opcao in ESTILOS:
             session['estilo_opcao'] = estilo_opcao
-            return redirect(url_for('escolher_classe'))
+            
+            # For classic style, go directly to class selection
+            if estilo_opcao == '1':
+                return redirect(url_for('escolher_classe'))
+            else:
+                # For styles that need attribute assignment
+                return redirect(url_for('definir_atributos'))
     
     return render_template('estilo.html')
+
+@app.route('/atributos', methods=['GET', 'POST'])
+def definir_atributos():
+    if 'nome' not in session or 'raca_opcao' not in session or 'estilo_opcao' not in session:
+        return redirect(url_for('index'))
+    
+    # Initialize attribute assignment if not already started
+    if 'valores' not in session:
+        # Create temporary player to get values
+        nome = session['nome']
+        raca_class = RACAS[session['raca_opcao']]
+        
+        # Special handling for Humano
+        if session['raca_opcao'] == '1':
+            raca = raca_class()
+            alinhamento_map = {'1': 'Neutro', '2': 'Ordem', '3': 'Caos'}
+            raca.alinhamento = alinhamento_map[session.get('alinhamento_opcao', '1')]
+        else:
+            raca = raca_class()
+        
+        estilo_class = ESTILOS[session['estilo_opcao']]
+        player = estilo_class(nome, raca)
+        
+        session['valores'] = player.valores
+        session['atributos_restantes'] = list(player.atributos.keys())
+        session['atributos_atribuidos'] = {}
+    
+    if request.method == 'POST':
+        atributo = request.form.get('atributo')
+        valor_str = request.form.get('valor')
+        
+        # Validate and process
+        if atributo and valor_str and valor_str.isdigit():
+            valor = int(valor_str)
+            valores = session.get('valores', [])
+            
+            if valor in valores:
+                # Update session
+                session['valores'].remove(valor)
+                session['atributos_restantes'].remove(atributo)
+                session['atributos_atribuidos'][atributo] = valor
+                session.modified = True
+                
+                if not session['atributos_restantes']:
+                    # All attributes assigned, proceed to class selection
+                    return redirect(url_for('escolher_classe_final'))
+                
+                # Continue with next attribute
+                return redirect(url_for('definir_atributos'))
+    
+    # Get current attribute to assign
+    atributos_restantes = session.get('atributos_restantes', [])
+    valores = session.get('valores', [])
+    
+    if not atributos_restantes:
+        return redirect(url_for('escolher_classe_final'))
+    
+    atributo_atual = atributos_restantes[0]
+    
+    return render_template('atributos.html', 
+                         atributo=atributo_atual,
+                         valores=valores,
+                         atributos_restantes=atributos_restantes)
 
 @app.route('/classe', methods=['GET', 'POST'])
 def escolher_classe():
@@ -102,14 +175,13 @@ def escolher_classe():
     if request.method == 'POST':
         classe_opcao = request.form.get('classe')
         if classe_opcao in CLASSES:
-            # Create the character
+            # Create the character (for classic style)
             nome = session['nome']
             raca_class = RACAS[session['raca_opcao']]
             
             # Special handling for Humano
             if session['raca_opcao'] == '1':
                 raca = raca_class()
-                # Set alignment based on user choice
                 alinhamento_map = {'1': 'Neutro', '2': 'Ordem', '3': 'Caos'}
                 raca.alinhamento = alinhamento_map[session.get('alinhamento_opcao', '1')]
             else:
@@ -117,14 +189,6 @@ def escolher_classe():
             
             estilo_class = ESTILOS[session['estilo_opcao']]
             player = estilo_class(nome, raca)
-            
-            # Handle attribute assignment for styles that need it
-            if session['estilo_opcao'] in ['2', '3']:
-                # For web, we need to handle this differently
-                # Store values in session and create a multi-step process
-                session['valores'] = player.valores
-                session['atributos_restantes'] = list(player.atributos.keys())
-                return redirect(url_for('definir_atributos'))
             
             classe_class = CLASSES[classe_opcao]
             classe = classe_class()
@@ -146,35 +210,6 @@ def escolher_classe():
             return redirect(url_for('mostrar_ficha'))
     
     return render_template('classe.html')
-
-@app.route('/atributos', methods=['GET', 'POST'])
-def definir_atributos():
-    if 'valores' not in session or 'atributos_restantes' not in session:
-        return redirect(url_for('index'))
-    
-    if request.method == 'POST':
-        atributo = request.form.get('atributo')
-        valor = request.form.get('valor')
-        
-        # Validate and process
-        if atributo and valor and valor.isdigit():
-            valor_int = int(valor)
-            if valor_int in session['valores']:
-                # Update session
-                session['valores'].remove(valor_int)
-                session['atributos_restantes'].remove(atributo)
-                session.setdefault('atributos_atribuidos', {})[atributo] = valor_int
-                
-                if not session['atributos_restantes']:
-                    # All attributes assigned, proceed to class selection
-                    return redirect(url_for('escolher_classe_final'))
-    
-    # Get current attribute to assign
-    atributo_atual = session['atributos_restantes'][0] if session['atributos_restantes'] else None
-    
-    return render_template('atributos.html', 
-                         atributo=atributo_atual,
-                         valores=session['valores'])
 
 @app.route('/classe_final', methods=['GET', 'POST'])
 def escolher_classe_final():
@@ -222,7 +257,8 @@ def escolher_classe_final():
             }
             
             # Clean up session
-            for key in ['valores', 'atributos_restantes', 'atributos_atribuidos']:
+            session_keys_to_remove = ['valores', 'atributos_restantes', 'atributos_atribuidos']
+            for key in session_keys_to_remove:
                 session.pop(key, None)
             
             return redirect(url_for('mostrar_ficha'))
@@ -235,6 +271,11 @@ def mostrar_ficha():
         return redirect(url_for('index'))
     
     return render_template('ficha.html', ficha=session['ficha'])
+
+@app.route('/reset')
+def reset():
+    session.clear()
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

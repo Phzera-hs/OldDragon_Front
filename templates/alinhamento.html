@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Escolha o Alinhamento</h2>
+    <p>Como humano, você pode escolher seu alinhamento:</p>
+    
+    <form method="post">
+        <div class="options-grid">
+            <div class="option-card">
+                <input type="radio" id="alinhamento1" name="alinhamento" value="1" required>
+                <label for="alinhamento1">
+                    <h3>Neutro</h3>
+                    <p>Equilíbrio e moderação</p>
+                    <p><em>Age de acordo com a situação</em></p>
+                </label>
+            </div>
+            
+            <div class="option-card">
+                <input type="radio" id="alinhamento2" name="alinhamento" value="2">
+                <label for="alinhamento2">
+                    <h3>Ordem</h3>
+                    <p>Lei e estrutura</p>
+                    <p><em>Segue regras e tradições</em></p>
+                </label>
+            </div>
+            
+            <div class="option-card">
+                <input type="radio" id="alinhamento3" name="alinhamento" value="3">
+                <label for="alinhamento3">
+                    <h3>Caos</h3>
+                    <p>Liberdade e espontaneidade</p>
+                    <p><em>Prefere a liberdade às regras</em></p>
+                </label>
+            </div>
+        </div>
+        <button type="submit">Próximo</button>
+    </form>
+</div>
+{% endblock %}
