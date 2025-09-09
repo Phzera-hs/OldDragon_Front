@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="ficha-container">
+    <h2>Ficha do Personagem</h2>
+    <div class="ficha-grid">
+        <div class="ficha-section">
+            <h3>Informações Básicas</h3>
+            <p><strong>Nome:</strong> {{ ficha.nome }}</p>
+            <p><strong>Raça:</strong> {{ ficha.raca }}</p>
+            <p><strong>Classe:</strong> {{ ficha.classe }} (Nível {{ ficha.nivel }})</p>
+            <p><strong>Pontos de Vida:</strong> {{ ficha.pontos_vida }}</p>
+        </div>
+
+        <div class="ficha-section">
+            <h3>Características</h3>
+            <p><strong>Movimento:</strong> {{ ficha.movimento }}m</p>
+            <p><strong>Infravisão:</strong> {{ ficha.infravisao }}m</p>
+            <p><strong>Alinhamento:</strong> {{ ficha.alinhamento }}</p>
+        </div>
+
+        <div class="ficha-section">
+            <h3>Atributos</h3>
+            {% for atributo, valor in ficha.atributos.items() %}
+            <div class="atributo-bar">
+                <span class="atributo-name">{{ atributo.capitalize() }}:</span>
+                <div class="bar-container">
+                    <!-- <div class="bar-fill" style="width: {{ (valor / 20) * 100 }}%"></div> -->
+                    <span class="bar-value">{{ valor }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="ficha-section">
+            <h3>Habilidades</h3>
+            <ul>
+                {% for habilidade in ficha.habilidades %}
+                <li>{{ habilidade }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Criar Novo Personagem</h2>
+    <form action="{{ url_for('escolher_raca') }}" method="post">
+        <div class="form-group">
+            <label for="nome">Nome do Personagem:</label>
+            <input type="text" id="nome" name="nome" required>
+        </div>
+        <button type="submit">Começar</button>
+    </form>
+</div>
+{% endblock %}

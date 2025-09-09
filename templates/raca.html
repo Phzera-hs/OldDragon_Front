@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Escolha a Raça</h2>
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    <form method="post">
+        <input type="hidden" name="nome" value="{{ request.form.nome }}">
+        <div class="options-grid">
+            <div class="option-card">
+                <input type="radio" id="raca1" name="raca" value="1" required>
+                <label for="raca1">
+                    <h3>Humano</h3>
+                    <p>+1 em todos os atributos</p>
+                </label>
+            </div>
+            <div class="option-card">
+                <input type="radio" id="raca2" name="raca" value="2">
+                <label for="raca2">
+                    <h3>Elfo</h3>
+                    <p>+2 Constituição, +2 Inteligência</p>
+                </label>
+            </div>
+            <!-- Add other races similarly -->
+        </div>
+        <button type="submit">Próximo</button>
+    </form>
+</div>
+{% endblock %}
