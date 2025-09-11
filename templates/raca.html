@@ -8,7 +8,8 @@
     {% endif %}
     
     <form method="post">
-        <input type="hidden" name="nome" value="{{ session.nome }}">
+        <!-- Campo nome escondido para manter o valor -->
+        <input type="hidden" name="nome" value="{{ nome }}">
         
         <div class="options-grid">
             <div class="option-card">

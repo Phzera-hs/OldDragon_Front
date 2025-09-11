@@ -3,17 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Personagem</title>
+    <title>Criador de Personagem - RPG</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Criador de Personagem</h1>
+            <h1>🎲 Criador de Personagem RPG</h1>
+            <nav class="progress-steps">
+                {% set steps = [
+                    ('index', 'Nome'),
+                    ('raca', 'Raça'),
+                    ('alinhamento', 'Alinhamento'),
+                    ('estilo', 'Estilo'),
+                    ('atributos', 'Atributos'),
+                    ('classe', 'Classe'),
+                    ('ficha', 'Ficha')
+                ] %}
+                
+                {% for step_id, step_name in steps %}
+                <span class="step {% if session.etapa_atual == step_id %}active{% endif %}">
+                    {{ step_name }}
+                </span>
+                {% if not loop.last %}<span class="step-separator">→</span>{% endif %}
+                {% endfor %}
+            </nav>
         </header>
+
         <main>
+            <!-- Flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+
             {% block content %}{% endblock %}
         </main>
+
+        <footer>
+            <div class="navigation-buttons">
+                {% if session.etapa_atual != 'index' %}
+                <a href="{{ url_for('reset') }}" class="btn btn-danger">↺ Reiniciar</a>
+                {% endif %}
+                
+                {% if session.etapa_atual == 'ficha' %}
+                <a href="{{ url_for('index') }}" class="btn btn-success">✨ Novo Personagem</a>
+                {% endif %}
+            </div>
+        </footer>
     </div>
+
+    <script>
+        // Client-side validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (!this.checkValidity()) {
+                        e.preventDefault();
+                        alert('Por favor, preencha todos os campos obrigatórios.');
+                    }
+                });
+            });
+
+            // Auto-advance select fields on mobile
+            const selects = document.querySelectorAll('select');
+            selects.forEach(select => {
+                select.addEventListener('change', function() {
+                    if (this.value) {
+                        this.form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

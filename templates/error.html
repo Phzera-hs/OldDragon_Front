@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container">
+    <div class="error-container">
+        <h2>❌ {{ error }}</h2>
+        <p>Desculpe, ocorreu um erro inesperado.</p>
+        <div class="error-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">🏠 Página Inicial</a>
+            <a href="javascript:history.back()" class="btn">↩ Voltar</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
