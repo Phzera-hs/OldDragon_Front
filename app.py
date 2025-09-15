@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for, flash, abort
+from flask import Flask, render_template, request, session, redirect, url_for
 import sys
 import os
 import html
@@ -21,7 +21,7 @@ from models.classe.Bardo import Bardo
 from models.classe.Ladrao import Ladrao
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'dev_secret_key_change_in_production')
+app.secret_key = os.environ.get('SECRET_KEY', 'dev_secret_key_medieval_rpg_2024')
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 # Mapping for races and classes
@@ -60,32 +60,22 @@ def escolher_raca():
     session['etapa_atual'] = 'raca'
     
     if request.method == 'POST':
-        try:
-            raca_opcao = request.form.get('raca')
-            nome = request.form.get('nome', '').strip()
-            
-            # Validate input
-            if not nome or len(nome) > 50:
-                flash("Nome inválido. Deve ter entre 1 e 50 caracteres.", "error")
-                return render_template('raca.html', nome=nome, error="Nome inválido")
-            
-            if raca_opcao not in RACAS:
-                flash("Raça inválida selecionada.", "error")
-                return render_template('raca.html', nome=nome, error="Raça inválida")
-            
-            # Sanitize inputs
-            session['nome'] = html.escape(nome)
-            session['raca_opcao'] = raca_opcao
-            
-            # Special handling for Humano (alignment choice)
-            if raca_opcao == '1':
-                return redirect(url_for('escolher_alinhamento'))
-            
-            return redirect(url_for('escolher_estilo'))
-            
-        except Exception as e:
-            flash(f"Erro ao processar raça: {str(e)}", "error")
-            return render_template('raca.html', error="Erro interno")
+        raca_opcao = request.form.get('raca')
+        nome = request.form.get('nome', '').strip()
+        
+        if not nome or len(nome) > 50:
+            return render_template('raca.html', nome=nome)
+        
+        if raca_opcao not in RACAS:
+            return render_template('raca.html', nome=nome)
+        
+        session['nome'] = html.escape(nome)
+        session['raca_opcao'] = raca_opcao
+        
+        if raca_opcao == '1':
+            return redirect(url_for('escolher_alinhamento'))
+        
+        return redirect(url_for('escolher_estilo'))
     
     nome = session.get('nome', '')
     return render_template('raca.html', nome=nome)
@@ -102,8 +92,6 @@ def escolher_alinhamento():
         if alinhamento_opcao in ['1', '2', '3']:
             session['alinhamento_opcao'] = alinhamento_opcao
             return redirect(url_for('escolher_estilo'))
-        else:
-            flash("Alinhamento inválido selecionado.", "error")
     
     return render_template('alinhamento.html')
 
@@ -117,42 +105,31 @@ def escolher_estilo():
     if request.method == 'POST':
         estilo_opcao = request.form.get('estilo')
         if estilo_opcao in ESTILOS:
-            try:
-                session['estilo_opcao'] = estilo_opcao
-                
-                # Create character instance
-                nome = session['nome']
-                raca_class = RACAS[session['raca_opcao']]
-                
-                # Handle Humano alignment
-                if session['raca_opcao'] == '1':
-                    raca = raca_class()
-                    alinhamento_map = {'1': 'Neutro', '2': 'Ordem', '3': 'Caos'}
-                    raca.alinhamento = alinhamento_map[session.get('alinhamento_opcao', '1')]
-                else:
-                    raca = raca_class()
-                
-                estilo_class = ESTILOS[estilo_opcao]
-                player = estilo_class(nome, raca)
-                
-                # Store values for attribute assignment
-                session['valores'] = player.valores
-                session['atributos_restantes'] = list(player.atributos.keys())
-                session['atributos_atribuidos'] = {}
-                
-                # For classic style, attributes are pre-set
-                if estilo_opcao == '1':
-                    player.aplicar_bonus_raca()
-                    session['player_data'] = player.get_ficha_dict()
-                    return redirect(url_for('escolher_classe'))
-                else:
-                    return redirect(url_for('definir_atributos'))
-                    
-            except Exception as e:
-                flash(f"Erro ao criar personagem: {str(e)}", "error")
-                return redirect(url_for('escolher_estilo'))
-        else:
-            flash("Estilo de geração inválido.", "error")
+            session['estilo_opcao'] = estilo_opcao
+            
+            nome = session['nome']
+            raca_class = RACAS[session['raca_opcao']]
+            
+            if session['raca_opcao'] == '1':
+                raca = raca_class()
+                alinhamento_map = {'1': 'Neutro', '2': 'Ordem', '3': 'Caos'}
+                raca.alinhamento = alinhamento_map[session.get('alinhamento_opcao', '1')]
+            else:
+                raca = raca_class()
+            
+            estilo_class = ESTILOS[estilo_opcao]
+            player = estilo_class(nome, raca)
+            
+            session['valores'] = player.valores
+            session['atributos_restantes'] = list(player.atributos.keys())
+            session['atributos_atribuidos'] = {}
+            
+            if estilo_opcao == '1':  # Clássico aplica automaticamente
+                player.aplicar_bonus_raca()
+                session['player_data'] = player.get_ficha_dict()
+                return redirect(url_for('escolher_classe'))
+            else:
+                return redirect(url_for('definir_atributos'))
     
     return render_template('estilo.html')
 
@@ -172,9 +149,13 @@ def definir_atributos():
             valores = session.get('valores', [])
             
             if valor in valores:
-                # Update session
-                session['valores'].remove(valor)
-                session['atributos_restantes'].remove(atributo)
+                valores.remove(valor)
+                session['valores'] = valores
+                atributos_restantes = session.get('atributos_restantes', [])
+                
+                if atributo in atributos_restantes:
+                    atributos_restantes.remove(atributo)
+                    session['atributos_restantes'] = atributos_restantes
                 session['atributos_atribuidos'][atributo] = valor
                 session.modified = True
                 
@@ -182,10 +163,6 @@ def definir_atributos():
                     return criar_personagem_final()
                 
                 return redirect(url_for('definir_atributos'))
-            else:
-                flash("Valor não disponível para seleção.", "error")
-        else:
-            flash("Selecione um valor válido.", "error")
     
     atributos_restantes = session.get('atributos_restantes', [])
     valores = session.get('valores', [])
@@ -201,42 +178,33 @@ def definir_atributos():
                          atributos_restantes=atributos_restantes)
 
 def criar_personagem_final():
-    """Cria o personagem final com os atributos atribuídos"""
-    try:
-        nome = session['nome']
-        raca_class = RACAS[session['raca_opcao']]
-        
-        # Handle Humano alignment
-        if session['raca_opcao'] == '1':
-            raca = raca_class()
-            alinhamento_map = {'1': 'Neutro', '2': 'Ordem', '3': 'Caos'}
-            raca.alinhamento = alinhamento_map[session.get('alinhamento_opcao', '1')]
-        else:
-            raca = raca_class()
-        
-        estilo_class = ESTILOS[session['estilo_opcao']]
-        player = estilo_class(nome, raca)
-        
-        # Apply assigned attributes
-        for atributo, valor in session['atributos_atribuidos'].items():
-            player.atributos[atributo] = valor
-        
-        player.aplicar_bonus_raca()
-        
-        # Store player data for class selection
-        session['player_data'] = player.get_ficha_dict()
-        
-        # Clean up temporary data
-        for key in ['valores', 'atributos_restantes', 'atributos_atribuidos']:
-            session.pop(key, None)
-        
-        return redirect(url_for('escolher_classe'))
-        
-    except Exception as e:
-        flash(f"Erro ao finalizar personagem: {str(e)}", "error")
-        return redirect(url_for('index'))
-
-@app.route('/classe', methods=['GET', 'POST'])
+    nome = session['nome']
+    raca_class = RACAS[session['raca_opcao']]
+    
+    if session['raca_opcao'] == '1':
+        raca = raca_class()
+        alinhamento_map = {'1': 'Neutro', '2': 'Ordem', '3': 'Caos'}
+        raca.alinhamento = alinhamento_map[session.get('alinhamento_opcao', '1')]
+    else:
+        raca = raca_class()
+    
+    estilo_class = ESTILOS[session['estilo_opcao']]
+    player = estilo_class(nome, raca)
+    
+    # aplica os atributos escolhidos
+    for atributo, valor in session.get('atributos_atribuidos', {}).items():
+        player.atributos[atributo] = valor
+    
+    player.aplicar_bonus_raca()
+    
+    # agora guarda o dict completo no session
+    session['player_data'] = player.get_ficha_dict()
+    
+    # limpa variáveis auxiliares
+    for key in ['valores', 'atributos_restantes', 'atributos_atribuidos']:
+        session.pop(key, None)
+    
+    return redirect(url_for('escolher_classe'))
 
 @app.route('/classe', methods=['GET', 'POST'])
 def escolher_classe():
@@ -248,50 +216,20 @@ def escolher_classe():
     if request.method == 'POST':
         classe_opcao = request.form.get('classe')
         if classe_opcao in CLASSES:
-            try:
-                # Recreate character with class
-                nome = session['nome']
-                raca_class = RACAS[session['raca_opcao']]
-                
-                # Handle Humano alignment
-                if session['raca_opcao'] == '1':
-                    raca = raca_class()
-                    alinhamento_map = {'1': 'Neutro', '2': 'Ordem', '3': 'Caos'}
-                    raca.alinhamento = alinhamento_map[session.get('alinhamento_opcao', '1')]
-                else:
-                    raca = raca_class()
-                
-                estilo_class = ESTILOS[session['estilo_opcao']]
-                player = estilo_class(nome, raca)
-                
-                # Apply attributes based on style
-                if session['estilo_opcao'] in ['2', '3']:  # Aventureiro ou Heroico
-                    # Use os atributos atribuídos pelo usuário
-                    for atributo, valor in session.get('atributos_atribuidos', {}).items():
-                        player.atributos[atributo] = valor
-                else:  # Clássico - os atributos já foram definidos no construtor
-                    pass
-                
-                player.aplicar_bonus_raca()
-                
-                # Add class
-                classe_class = CLASSES[classe_opcao]
-                classe = classe_class()
-                player.escolher_classe(classe)
-                
-                # Store final character sheet
-                session['ficha'] = player.get_ficha_dict()
-                
-                # Clean up
-                for key in ['player_data']:
-                    session.pop(key, None)
-                
-                return redirect(url_for('mostrar_ficha'))
-                
-            except Exception as e:
-                flash(f"Erro ao adicionar classe: {str(e)}", "error")
-        else:
-            flash("Classe inválida selecionada.", "error")
+            # carrega player já pronto
+            player_data = session['player_data']
+            
+            classe_class = CLASSES[classe_opcao]
+            classe = classe_class()
+            
+            # adiciona classe no dicionário final
+            player_data['classe'] = classe.__class__.__name__
+            
+            # salva ficha final
+            session['ficha'] = player_data
+            session.pop('player_data', None)
+            
+            return redirect(url_for('mostrar_ficha'))
     
     return render_template('classe.html')
 
@@ -306,14 +244,11 @@ def mostrar_ficha():
 @app.route('/reset')
 def reset():
     session.clear()
-    flash("Personagem resetado com sucesso.", "info")
     return redirect(url_for('index'))
 
 @app.route('/voltar/<etapa>')
 def voltar_etapa(etapa):
-    """Permite voltar para etapas anteriores"""
     if etapa in ETAPAS:
-        # Clear session data from subsequent steps
         current_index = ETAPAS.index(etapa)
         for step in ETAPAS[current_index + 1:]:
             if step in session:
@@ -323,14 +258,6 @@ def voltar_etapa(etapa):
         return redirect(url_for(etapa))
     
     return redirect(url_for('index'))
-
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('error.html', error="Página não encontrada"), 404
-
-@app.errorhandler(500)
-def internal_error(error):
-    return render_template('error.html', error="Erro interno do servidor"), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

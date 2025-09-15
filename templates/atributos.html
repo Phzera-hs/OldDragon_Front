@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="form-container">
-    <h2>Distribuir Atributos</h2>
+<div class="form-container decorative-border">
+    <div class="decorative-corner tl"></div>
+    <div class="decorative-corner tr"></div>
+    <div class="decorative-corner bl"></div>
+    <div class="decorative-corner br"></div>
+    
+    <h2>📊 Distribuir Atributos</h2>
     
     <div class="attribute-info">
-        <h3>Atributo atual: {{ atributo.capitalize() }}</h3>
-        <p>Valores disponíveis: {{ valores|join(', ') }}</p>
+        <h3>⚡ Atributo atual: {{ atributo.capitalize() }}</h3>
+        <p>🎯 Valores disponíveis: {{ valores|join(', ') }}</p>
     </div>
     
     <form method="post">
@@ -15,25 +20,25 @@
         <div class="form-group">
             <label for="valor">Escolha um valor para {{ atributo.capitalize() }}:</label>
             <select id="valor" name="valor" required>
-                <option value="">Selecione um valor</option>
+                <option value="">🗡️ Selecione um valor</option>
                 {% for valor in valores %}
                 <option value="{{ valor }}">{{ valor }}</option>
                 {% endfor %}
             </select>
         </div>
         
-        <button type="submit">Confirmar</button>
+        <button type="submit">✅ Confirmar</button>
     </form>
     
     <div class="progress">
-        <p>Progresso: {{ 6 - session.atributos_restantes|length }}/6 atributos definidos</p>
+        <p>📈 Progresso: {{ 6 - session.atributos_restantes|length }}/6 atributos definidos</p>
         <div class="progress-bar">
             <div class="progress-fill" style="width: {{ ((6 - session.atributos_restantes|length) / 6) * 100 }}%"></div>
         </div>
     </div>
     
-    <div style="margin-top: 20px;">
-        <h4>Atributos já definidos:</h4>
+    <div style="margin-top: 30px; padding: 20px; background: var(--parchment-dark); border-radius: 10px; border: 2px solid var(--gold);">
+        <h4>📋 Atributos já definidos:</h4>
         <ul>
             {% for attr, val in session.atributos_atribuidos.items() %}
             <li><strong>{{ attr.capitalize() }}:</strong> {{ val }}</li>

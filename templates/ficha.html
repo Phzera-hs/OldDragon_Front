@@ -2,39 +2,69 @@
 
 {% block content %}
 <div class="ficha-container">
-    <h2>Ficha do Personagem</h2>
+    <h2>📜 Ficha do Personagem</h2>
+    
     <div class="ficha-grid">
-        <div class="ficha-section">
-            <h3>Informações Básicas</h3>
+        <div class="ficha-section decorative-border">
+            <div class="decorative-corner tl"></div>
+            <div class="decorative-corner tr"></div>
+            <div class="decorative-corner bl"></div>
+            <div class="decorative-corner br"></div>
+            
+            <h3>👤 Informações Básicas</h3>
             <p><strong>Nome:</strong> {{ ficha.nome }}</p>
             <p><strong>Raça:</strong> {{ ficha.raca }}</p>
             <p><strong>Classe:</strong> {{ ficha.classe }} (Nível {{ ficha.nivel }})</p>
-            <p><strong>Pontos de Vida:</strong> {{ ficha.pontos_vida }}</p>
+            <p><strong>Pontos de Vida:</strong> ❤️ {{ ficha.pontos_vida }}</p>
         </div>
 
-        <div class="ficha-section">
-            <h3>Características</h3>
-            <p><strong>Movimento:</strong> {{ ficha.movimento }}m</p>
-            <p><strong>Infravisão:</strong> {{ ficha.infravisao }}m</p>
-            <p><strong>Alinhamento:</strong> {{ ficha.alinhamento }}</p>
+        <div class="ficha-section decorative-border">
+            <div class="decorative-corner tl"></div>
+            <div class="decorative-corner tr"></div>
+            <div class="decorative-corner bl"></div>
+            <div class="decorative-corner br"></div>
+            
+            <h3>🏃‍♂️ Características</h3>
+            <p><strong>Movimento:</strong> 🏃 {{ ficha.movimento }}m</p>
+            <p><strong>Infravisão:</strong> 👁️ {{ ficha.infravisao }}m</p>
+            <p><strong>Alinhamento:</strong> ⚖️ {{ ficha.alinhamento }}</p>
         </div>
 
-        <div class="ficha-section">
-            <h3>Atributos</h3>
+        <div class="ficha-section decorative-border">
+            <div class="decorative-corner tl"></div>
+            <div class="decorative-corner tr"></div>
+            <div class="decorative-corner bl"></div>
+            <div class="decorative-corner br"></div>
+            
+            <h3>💪 Atributos</h3>
             {% for atributo, valor in ficha.atributos.items() %}
             <div class="atributo-bar">
-                <span class="atributo-name">{{ atributo.capitalize() }}:</span>
+                <span class="atributo-name">
+                    {% if atributo == 'forca' %}💪 Força
+                    {% elif atributo == 'destreza' %}🏹 Destreza
+                    {% elif atributo == 'constituicao' %}🛡️ Constituição
+                    {% elif atributo == 'inteligencia' %}📚 Inteligência
+                    {% elif atributo == 'sabedoria' %}🧠 Sabedoria
+                    {% elif atributo == 'carisma' %}🎭 Carisma
+                    {% else %}{{ atributo.capitalize() }}
+                    {% endif %}:
+                </span>
                 <div class="bar-container">
-                    <div class="bar-fill" style="width: {{ valor * 5 }}%">
-                        <span class="bar-value">{{ valor }}</span>  
+                    <div class="bar-fill" style="width: {{ (valor * 5) }}%">
+                        <span class="bar-value">{{ valor }}</span>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
 
-        <div class="ficha-section">
-            <h3>Habilidades</h3>
+        <div class="ficha-section decorative-border">
+            <div class="decorative-corner tl"></div>
+            <div class="decorative-corner tr"></div>
+            <div class="decorative-corner bl"></div>
+            <div class="decorative-corner br"></div>
+            
+            <h3>🎯 Habilidades de Classe</h3>
             <ul>
                 {% for habilidade in ficha.habilidades %}
                 <li>{{ habilidade }}</li>
@@ -42,11 +72,32 @@
             </ul>
         </div>
 
-        <div class="ficha-section">
-            <h3>Habilidades da Raça</h3>
+        <div class="ficha-section decorative-border">
+            <div class="decorative-corner tl"></div>
+            <div class="decorative-corner tr"></div>
+            <div class="decorative-corner bl"></div>
+            <div class="decorative-corner br"></div>
+            
+            <h3>🏺 Habilidades da Raça</h3>
             <ul>
                 {% for habilidade in ficha.habilidades_raca %}
                 <li>{{ habilidade }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="ficha-section decorative-border">
+            <div class="decorative-corner tl"></div>
+            <div class="decorative-corner tr"></div>
+            <div class="decorative-corner bl"></div>
+            <div class="decorative-corner br"></div>
+            
+            <h3>📊 Modificadores de Raça</h3>
+            <ul>
+                {% for atributo, bonus in ficha.modificadores_raca.items() %}
+                {% if bonus != 0 %}
+                <li><strong>{{ atributo.capitalize() }}:</strong> {{ "+" if bonus > 0 }}{{ bonus }}</li>
+                {% endif %}
                 {% endfor %}
             </ul>
         </div>

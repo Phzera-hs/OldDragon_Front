@@ -1,13 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="form-container">
-    <div class="error-container">
+<div class="form-container decorative-border">
+    <div class="decorative-corner tl"></div>
+    <div class="decorative-corner tr"></div>
+    <div class="decorative-corner bl"></div>
+    <div class="decorative-corner br"></div>
+    
+    <div class="error-container" style="text-align: center;">
         <h2>❌ {{ error }}</h2>
-        <p>Desculpe, ocorreu um erro inesperado.</p>
-        <div class="error-actions">
-            <a href="{{ url_for('index') }}" class="btn btn-primary">🏠 Página Inicial</a>
-            <a href="javascript:history.back()" class="btn">↩ Voltar</a>
+        <p style="font-size: 1.2em; margin: 20px 0;">Desculpe, ocorreu um erro inesperado em sua jornada.</p>
+        <div class="error-actions" style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">🏰 Voltar ao Início</a>
+            <a href="javascript:history.back()" class="btn">↩️ Retornar</a>
         </div>
     </div>
 </div>

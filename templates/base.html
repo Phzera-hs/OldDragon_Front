@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Personagem - RPG</title>
+    <title>🏰 Criador de Personagens Medievais</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+    <div class="container decorative-border">
+        <div class="decorative-corner tl"></div>
+        <div class="decorative-corner tr"></div>
+        <div class="decorative-corner bl"></div>
+        <div class="decorative-corner br"></div>
+        
         <header>
-            <h1>🎲 Criador de Personagem RPG</h1>
+            <h1>🏰 Criador de Personagens Medievais</h1>
             <nav class="progress-steps">
                 {% set steps = [
                     ('index', 'Nome'),
@@ -25,7 +31,7 @@
                 <span class="step {% if session.etapa_atual == step_id %}active{% endif %}">
                     {{ step_name }}
                 </span>
-                {% if not loop.last %}<span class="step-separator">→</span>{% endif %}
+                {% if not loop.last %}<span class="step-separator">⚔️</span>{% endif %}
                 {% endfor %}
             </nav>
         </header>
@@ -48,7 +54,7 @@
         <footer>
             <div class="navigation-buttons">
                 {% if session.etapa_atual != 'index' %}
-                <a href="{{ url_for('reset') }}" class="btn btn-danger">↺ Reiniciar</a>
+                <a href="{{ url_for('reset') }}" class="btn btn-danger">🔄 Reiniciar</a>
                 {% endif %}
                 
                 {% if session.etapa_atual == 'ficha' %}
@@ -59,7 +65,6 @@
     </div>
 
     <script>
-        // Client-side validation
         document.addEventListener('DOMContentLoaded', function() {
             const forms = document.querySelectorAll('form');
             forms.forEach(form => {

@@ -1,14 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="form-container">
-    <h2>Criar Novo Personagem</h2>
+<div class="form-container decorative-border">
+    <div class="decorative-corner tl"></div>
+    <div class="decorative-corner tr"></div>
+    <div class="decorative-corner bl"></div>
+    <div class="decorative-corner br"></div>
+    
+    <h2>🧙‍♂️ Forjar Novo Personagem</h2>
     <form action="{{ url_for('escolher_raca') }}" method="post">
         <div class="form-group">
             <label for="nome">Nome do Personagem:</label>
-            <input type="text" id="nome" name="nome" required>
+            <input type="text" id="nome" name="nome" required 
+                   placeholder="Ex: Aragon, Elrond, Gimli">
         </div>
-        <button type="submit">Começar</button>
+        <button type="submit">⚔️ Começar Jornada</button>
     </form>
 </div>
 {% endblock %}

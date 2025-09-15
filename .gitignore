@@ -1,37 +1,44 @@
-# Arquivos de cache do Python
+# Arquivos compilados
 __pycache__/
 *.py[cod]
 *$py.class
 
 # Ambiente virtual
-.venv/
+.env
+.venv
+env/
 venv/
 ENV/
-env/
+env.bak/
+venv.bak/
 
 # Configurações locais
-*.env
-*.ini
-*.cfg
-*.toml
-
-# Logs
+*.sqlite3
+*.db
 *.log
 
-# Arquivos temporários do sistema/IDE
-.DS_Store
-Thumbs.db
+# Cache / Testes
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Jupyter
+.ipynb_checkpoints
+
+# IDEs / Editores
 .vscode/
 .idea/
 *.swp
+*.swo
 
-# Compilações e distribuições
+# Distribuição / Builds
 build/
 dist/
 *.egg-info/
 .eggs/
 
-# Testes
-.coverage
-.pytest_cache/
-htmlcov/
+# Arquivos do sistema
+.DS_Store
+Thumbs.db

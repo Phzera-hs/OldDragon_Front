@@ -1,38 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="form-container">
-    <h2>Escolha o Estilo de Geração</h2>
+<div class="form-container decorative-border">
+    <div class="decorative-corner tl"></div>
+    <div class="decorative-corner tr"></div>
+    <div class="decorative-corner bl"></div>
+    <div class="decorative-corner br"></div>
+    
+    <h2>🎲 Escolha o Estilo de Geração</h2>
+    <p>Como deseja forjar os atributos do seu personagem?</p>
+    
     <form method="post">
         <div class="options-grid">
             <div class="option-card">
                 <input type="radio" id="estilo1" name="estilo" value="1" required>
                 <label for="estilo1">
-                    <h3>Clássico</h3>
-                    <p>3d6 direto nos atributos</p>
-                    <p><em>Método tradicional - rola 3d6 para cada atributo na ordem</em></p>
+                    <h3>📜 Clássico</h3>
+                    <p><strong>Método:</strong> 3d6 direto nos atributos</p>
+                    <p><strong>Dificuldade:</strong> Moderada</p>
+                    <p><strong>Recomendado para:</strong> Puristas e tradicionalistas</p>
+                    <em>O método tradicional - rola 3d6 para cada atributo na ordem</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="estilo2" name="estilo" value="2">
                 <label for="estilo2">
-                    <h3>Aventureiro</h3>
-                    <p>6 valores, você distribui</p>
-                    <p><em>Rola 3d6 seis vezes e você escolhe onde colocar cada valor</em></p>
+                    <h3>🗺️ Aventureiro</h3>
+                    <p><strong>Método:</strong> 6 valores, você distribui</p>
+                    <p><strong>Dificuldade:</strong> Moderada</p>
+                    <p><strong>Recomendado para:</strong> Estrategistas</p>
+                    <em>Rola 3d6 seis vezes e você escolhe onde colocar cada valor</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="estilo3" name="estilo" value="3">
                 <label for="estilo3">
-                    <h3>Heroico</h3>
-                    <p>4d6 dropa o menor, você distribui</p>
-                    <p><em>Rola 4d6, descarta o menor dado, e você escolhe onde colocar</em></p>
+                    <h3>👑 Heroico</h3>
+                    <p><strong>Método:</strong> 4d6 dropa o menor, você distribui</p>
+                    <p><strong>Dificuldade:</strong> Fácil</p>
+                    <p><strong>Recomendado para:</strong> Heróis épicos</p>
+                    <em>Rola 4d6, descarta o menor dado, e você escolhe onde colocar</em>
                 </label>
             </div>
         </div>
-        <button type="submit">Próximo</button>
+        <button type="submit">➡️ Próximo</button>
     </form>
 </div>
 {% endblock %}

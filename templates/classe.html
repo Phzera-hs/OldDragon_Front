@@ -1,38 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="form-container">
-    <h2>Escolha a Classe</h2>
+<div class="form-container decorative-border">
+    <div class="decorative-corner tl"></div>
+    <div class="decorative-corner tr"></div>
+    <div class="decorative-corner bl"></div>
+    <div class="decorative-corner br"></div>
+    
+    <h2>🎓 Escolha a Classe</h2>
+    <p>Qual caminho seu personagem seguirá?</p>
+    
     <form method="post">
         <div class="options-grid">
             <div class="option-card">
                 <input type="radio" id="classe1" name="classe" value="1" required>
                 <label for="classe1">
-                    <h3>Mago</h3>
+                    <h3>🧙‍♂️ Mago</h3>
                     <p><strong>Dado de Vida:</strong> d4</p>
                     <p><strong>Habilidades:</strong> Magia Arcana, Conhecimento Mágico, Identificar Magia, Preparar Feitiços</p>
+                    <p><strong>Papel:</strong> Controle e dano em área</p>
+                    <em>Mestres das artes arcanas</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="classe2" name="classe" value="2">
                 <label for="classe2">
-                    <h3>Ladrão</h3>
+                    <h3>🗡️ Ladrão</h3>
                     <p><strong>Dado de Vida:</strong> d6</p>
                     <p><strong>Habilidades:</strong> Furtividade, Armadilhas, Punga, Escalar Superfícies</p>
+                    <p><strong>Papel:</strong> Dano preciso e utilidade</p>
+                    <em>Mestres da sutileza e precisão</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="classe3" name="classe" value="3">
                 <label for="classe3">
-                    <h3>Bardo</h3>
+                    <h3>🎵 Bardo</h3>
                     <p><strong>Dado de Vida:</strong> d6</p>
                     <p><strong>Habilidades:</strong> Inspiração, Performance, Persuasão, Conhecimento Geral</p>
+                    <p><strong>Papel:</strong> Suporte e utilidade</p>
+                    <em>Mestres da palavra e da música</em>
                 </label>
             </div>
         </div>
-        <button type="submit">Criar Personagem</button>
+        <button type="submit">✨ Criar Personagem</button>
     </form>
 </div>
 {% endblock %}

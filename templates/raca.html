@@ -1,83 +1,93 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="form-container">
-    <h2>Escolha a Raça</h2>
+<div class="form-container decorative-border">
+    <div class="decorative-corner tl"></div>
+    <div class="decorative-corner tr"></div>
+    <div class="decorative-corner bl"></div>
+    <div class="decorative-corner br"></div>
+    
+    <h2>🏹 Escolha a Raça</h2>
     {% if error %}
-    <div class="error">{{ error }}</div>
+    <div class="flash flash-error">{{ error }}</div>
     {% endif %}
     
     <form method="post">
-        <!-- Campo nome escondido para manter o valor -->
         <input type="hidden" name="nome" value="{{ nome }}">
         
         <div class="options-grid">
             <div class="option-card">
                 <input type="radio" id="raca1" name="raca" value="1" required>
                 <label for="raca1">
-                    <h3>Humano</h3>
+                    <h3>👨‍🌾 Humano</h3>
                     <p><strong>Bônus:</strong> +1 em todos os atributos</p>
                     <p><strong>Movimento:</strong> 9m</p>
                     <p><strong>Habilidades:</strong> Aprendizado, Adaptabilidade</p>
+                    <em>Versáteis e ambiciosos</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="raca2" name="raca" value="2">
                 <label for="raca2">
-                    <h3>Elfo</h3>
+                    <h3>🧝‍♂️ Elfo</h3>
                     <p><strong>Bônus:</strong> +2 Constituição, +2 Inteligência</p>
                     <p><strong>Movimento:</strong> 9m</p>
                     <p><strong>Infravisão:</strong> 18m</p>
-                    <p><strong>Habilidades:</strong> Percepção Natural, Graciosos, Treinamento Racial, Imunidades</p>
+                    <p><strong>Habilidades:</strong> Percepção Natural, Graciosos</p>
+                    <em>Graciosos e longevos</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="raca3" name="raca" value="3">
                 <label for="raca3">
-                    <h3>Anão</h3>
+                    <h3>⛏️ Anão</h3>
                     <p><strong>Bônus:</strong> +2 Força, +2 Constituição</p>
                     <p><strong>Movimento:</strong> 6m</p>
                     <p><strong>Infravisão:</strong> 18m</p>
-                    <p><strong>Habilidades:</strong> Mineradores, Vigoroso, Armas Grandes, Inimigos</p>
+                    <p><strong>Habilidades:</strong> Mineradores, Vigoroso</p>
+                    <em>Resistentes e tradicionais</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="raca4" name="raca" value="4">
                 <label for="raca4">
-                    <h3>Meio-Elfo</h3>
-                    <p><strong>Bônus:</strong> Variado</p>
+                    <h3>🌳 Meio-Elfo</h3>
+                    <p><strong>Bônus:</strong> +3 Destreza, +1 Inteligência</p>
                     <p><strong>Movimento:</strong> 9m</p>
-                    <p><strong>Infravisão:</strong> 12m</p>
+                    <p><strong>Infravisão:</strong> 9m</p>
                     <p><strong>Habilidades:</strong> Herança Dupla, Adaptabilidade</p>
+                    <em>Entre dois mundos</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="raca5" name="raca" value="5">
                 <label for="raca5">
-                    <h3>Gnomo</h3>
-                    <p><strong>Bônus:</strong> +2 Inteligência, +1 Destreza</p>
+                    <h3>🔮 Gnomo</h3>
+                    <p><strong>Bônus:</strong> +3 Carisma, +1 Destreza</p>
                     <p><strong>Movimento:</strong> 6m</p>
                     <p><strong>Infravisão:</strong> 18m</p>
                     <p><strong>Habilidades:</strong> Ilusionismo, Engenhosidade</p>
+                    <em>Astutos e inventivos</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="raca6" name="raca" value="6">
                 <label for="raca6">
-                    <h3>Halfling</h3>
-                    <p><strong>Bônus:</strong> +2 Destreza, +1 Constituição</p>
+                    <h3>🍃 Halfling</h3>
+                    <p><strong>Bônus:</strong> +2 Destreza, +1 Constituição, +1 Sabedoria</p>
                     <p><strong>Movimento:</strong> 6m</p>
                     <p><strong>Habilidades:</strong> Sortudo, Furtivo, Resistente</p>
+                    <em>Pequenos e corajosos</em>
                 </label>
             </div>
         </div>
         
-        <button type="submit">Próximo</button>
+        <button type="submit">➡️ Próximo</button>
     </form>
 </div>
 {% endblock %}

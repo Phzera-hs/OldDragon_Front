@@ -1,40 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="form-container">
-    <h2>Escolha o Alinhamento</h2>
-    <p>Como humano, você pode escolher seu alinhamento:</p>
+<div class="form-container decorative-border">
+    <div class="decorative-corner tl"></div>
+    <div class="decorative-corner tr"></div>
+    <div class="decorative-corner bl"></div>
+    <div class="decorative-corner br"></div>
+    
+    <h2>⚖️ Escolha o Alinhamento</h2>
+    <p>Como humano, você deve escolher seu caminho:</p>
     
     <form method="post">
         <div class="options-grid">
             <div class="option-card">
                 <input type="radio" id="alinhamento1" name="alinhamento" value="1" required>
                 <label for="alinhamento1">
-                    <h3>Neutro</h3>
+                    <h3>☯️ Neutro</h3>
                     <p>Equilíbrio e moderação</p>
-                    <p><em>Age de acordo com a situação</em></p>
+                    <p><strong>Filosofia:</strong> "O caminho do meio é a verdadeira sabedoria"</p>
+                    <em>Age de acordo com a situação, sem extremos</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="alinhamento2" name="alinhamento" value="2">
                 <label for="alinhamento2">
-                    <h3>Ordem</h3>
+                    <h3>🏛️ Ordem</h3>
                     <p>Lei e estrutura</p>
-                    <p><em>Segue regras e tradições</em></p>
+                    <p><strong>Filosofia:</strong> "A ordem traz prosperidade e segurança"</p>
+                    <em>Segue regras, tradições e hierarquias</em>
                 </label>
             </div>
             
             <div class="option-card">
                 <input type="radio" id="alinhamento3" name="alinhamento" value="3">
                 <label for="alinhamento3">
-                    <h3>Caos</h3>
+                    <h3>🌪️ Caos</h3>
                     <p>Liberdade e espontaneidade</p>
-                    <p><em>Prefere a liberdade às regras</em></p>
+                    <p><strong>Filosofia:</strong> "A verdadeira liberdade está além das regras"</p>
+                    <em>Prefere a liberdade individual às estruturas rígidas</em>
                 </label>
             </div>
         </div>
-        <button type="submit">Próximo</button>
+        <button type="submit">➡️ Próximo</button>
     </form>
 </div>
 {% endblock %}
