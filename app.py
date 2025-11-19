@@ -19,6 +19,8 @@ from models.racas.Meio_Elfo import Meio_Elfo
 from models.classe.Mago import Mago
 from models.classe.Bardo import Bardo
 from models.classe.Ladrao import Ladrao
+from utils.json_db import salvar_personagem
+
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev_secret_key_medieval_rpg_2024')
@@ -225,6 +227,13 @@ def escolher_classe():
             # adiciona classe no dicionário final
             player_data['classe'] = classe.__class__.__name__
             
+            try:
+                salvar_personagem(player_data)
+                session['save_status'] = 'ok'
+            except Exception as e:
+                print("Erro ao salvar personagem:", e)
+                session['save_status'] = 'erro'
+
             # salva ficha final
             session['ficha'] = player_data
             session.pop('player_data', None)
@@ -239,7 +248,11 @@ def mostrar_ficha():
         return redirect(url_for('index'))
     
     session['etapa_atual'] = 'ficha'
-    return render_template('ficha.html', ficha=session['ficha'])
+
+    status = session.pop('save_status', None)
+
+    return render_template('ficha.html', ficha=session['ficha'], status=status)
+
 
 @app.route('/reset')
 def reset():

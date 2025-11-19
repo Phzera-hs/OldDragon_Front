@@ -3,6 +3,16 @@
 {% block content %}
 <div class="ficha-container">
     <h2>📜 Ficha do Personagem</h2>
+    {% if status == 'ok' %}
+    <div class="alert alert-success" style="margin: 15px 0; padding: 10px; border-radius: 5px; background: #c8f7c5; border-left: 4px solid #2ecc71;">
+        ✔️ Seu personagem foi salvo com sucesso nos pergaminhos antigos!
+    </div>
+    {% elif status == 'erro' %}
+    <div class="alert alert-danger" style="margin: 15px 0; padding: 10px; border-radius: 5px; background: #f8d7da; border-left: 4px solid #c0392b;">
+        ❌ Algo deu errado ao registrar seu herói. Os escribas derrubaram tinta no papiro.
+    </div>
+    {% endif %}
+
     
     <div class="ficha-grid">
         <div class="ficha-section decorative-border">
