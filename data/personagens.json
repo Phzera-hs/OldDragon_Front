@@ -1,0 +1,33 @@
+[
+  {
+    "alinhamento": "Caos",
+    "atributos": {
+      "carisma": 8,
+      "constituicao": 12,
+      "destreza": 10,
+      "forca": 17,
+      "inteligencia": 18,
+      "sabedoria": 13
+    },
+    "classe": "Mago",
+    "habilidades": [],
+    "habilidades_raca": [
+      "Aprendizado",
+      "Adaptabilidade"
+    ],
+    "infravisao": 0,
+    "modificadores_raca": {
+      "carisma": 1,
+      "constituicao": 1,
+      "destreza": 1,
+      "forca": 1,
+      "inteligencia": 1,
+      "sabedoria": 1
+    },
+    "movimento": 9,
+    "nivel": 1,
+    "nome": "Salazar",
+    "pontos_vida": 0,
+    "raca": "Humano"
+  }
+]
